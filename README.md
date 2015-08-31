@@ -1,5 +1,6 @@
 [![wercker status](https://app.wercker.com/status/4512ccded9fda6ba38b506b92a9619c3/s/master "wercker status")](https://app.wercker.com/project/bykey/4512ccded9fda6ba38b506b92a9619c3)
-
+[![Code Climate](https://codeclimate.com/github/node-modli/modli-mysql/badges/gpa.svg)](https://codeclimate.com/github/node-modli/modli-mysql)
+[![Test Coverage](https://codeclimate.com/github/node-modli/modli-mysql/badges/coverage.svg)](https://codeclimate.com/github/node-modli/modli-mysql/coverage)
 
 # Modli - MySQL Adapter
 
