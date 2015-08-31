@@ -1,0 +1,6 @@
+docker
+test
+.codeclimate.yml
+.gitignore
+.jshintrc
+wercker.yml

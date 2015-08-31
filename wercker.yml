@@ -1,0 +1,44 @@
+box: node:0.12
+
+services:
+  - modli/mysql
+
+build:
+  steps:
+    - script:
+        name: mysql config
+        code: |
+          export MODLI_MYSQL_HOST=${MYSQL_PORT_3306_TCP_ADDR}
+          export MODLI_MYSQL_DATABASE=${MYSQL_ENV_MYSQL_DATABASE}
+          export MODLI_MYSQL_PORT=${MYSQL_PORT_3306_TCP_PORT}
+          export MODLI_MYSQL_PASSWORD=${MYSQL_ENV_MYSQL_PASSWORD}
+          export MODLI_MYSQL_USERNAME=${MYSQL_ENV_MYSQL_USER}
+    - script:
+        name: echo env
+        code: |
+          env
+    - npm-install
+    - script:
+        name: lint code
+        code: |
+          make lint
+    - script:
+        name: run tests
+        code: |
+          make test
+    - script:
+        name: run coverage
+        code: |
+          make test-cover
+    - script:
+        name: build
+        code: |
+          make build
+          
+  after-steps:
+    # Run and report coverage
+    - script:
+        name: send code coverage report
+        code: |
+          npm install -g codeclimate-test-reporter
+          codeclimate-test-reporter < coverage/lcov.info
