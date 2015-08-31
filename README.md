@@ -5,7 +5,7 @@
 # Modli - MySQL Adapter
 
 This module provides adapter for the [MySQL](https://www.mysql.com/)
-datasource for integration with [Modli]().
+datasource for integration with [Modli](https://github.com/node-modli).
 
 ## Installation
 
@@ -161,7 +161,7 @@ MODLI_MYSQL_DATABASE
 ```
 
 This repository includes a base container config for running locally which is
-located at [/dockerfiles/mysql](/dockerfiles/mysql).
+located in the [/docker](/docker) directory.
 
 ## Makefile and Scripts
 
@@ -185,8 +185,7 @@ able to be broken up.
 
 **Test Inidividual File**
 
-An individual spec can be run by specifying the `FILE`. This is convenient when
-working on an individual adapter.
+An individual spec can be run by specifying the `FILE`:
 
 ```
 make test FILE=some.spec.js
@@ -206,8 +205,8 @@ Both `make {COMMAND}` and `npm run {COMMAND}` work for any of the above commands
 
 ## License
 
-Modli-NeDB is licensed under the MIT license. Please see `LICENSE.txt` for full details.
+Modli-MySQL is licensed under the MIT license. Please see `LICENSE.txt` for full details.
 
 ## Credits
 
-Modli-NeDB was designed and created at [TechnologyAdvice](http://www.technologyadvice.com).
+Modli-MySQL was designed and created at [TechnologyAdvice](http://www.technologyadvice.com).
