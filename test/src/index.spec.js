@@ -146,7 +146,7 @@ describe('mysql', () => {
 
   describe('update', () => {
     it('fails when validation does not pass', (done) => {
-      mysql.create({
+      mysql.update({}, {
         failValidate: true
       })
       .catch((err) => {
