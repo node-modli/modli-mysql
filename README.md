@@ -20,7 +20,7 @@ When defining a property which will utilize the adapter it is required that a
 
 ```javascript
 import { model, adapter, Joi, use } from 'modli';
-import { mysql } from 'modli-mysql';
+import mysql from 'modli-mysql';
 
 model.add({
   name: 'foo',
@@ -60,10 +60,6 @@ const mysqlTest = use('foo', 'mysqlFoo');
 ## Methods
 
 The following methods exist natively on the MySQL adapter:
-
-### `config`
-
-Runs the configuration and connects to the datasource.
 
 ### `query`
 
