@@ -31,7 +31,7 @@ mysql.tableName = 'foo';
 describe('mysql', () => {
   // Drop the table after testing
   after((done) => {
-    mysql.query('DROP TABLE foo;')
+    mysql.query(`DROP TABLE ${mysql.tableName};`)
       .then(() => {
         done();
       })
