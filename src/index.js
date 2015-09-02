@@ -88,14 +88,26 @@ export default class {
    * @param {Object} query The query to execute
    * @returns {Object} promise
    */
-  read (query) {
+  read (query, version = false) {
     let where;
     if (query) {
       where = ` WHERE ${query}`;
     } else {
       where = '';
     }
-    return this.query(`SELECT * FROM \`${this.tableName}\`${where}`);
+    return new Promise((resolve, reject) => {
+      return this.query(`SELECT * FROM \`${this.tableName}\`${where}`)
+        .then((results) => {
+          let tmp = [];
+          results.forEach((r) => {
+            tmp.push(this.sanitize(r, version));
+          });
+          resolve(tmp);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
   }
 
   /**

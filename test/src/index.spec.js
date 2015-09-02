@@ -20,8 +20,13 @@ mysql.validate = (body) => {
   return null;
 };
 
+// Mock sanitize method, this is automatically done by the model
+mysql.sanitize = (body) => {
+  return body;
+};
+
 // Specific model properties
-mysql.tableName = 'foo1';
+mysql.tableName = 'foo';
 
 describe('mysql', () => {
   describe('construct', () => {
