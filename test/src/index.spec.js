@@ -1,7 +1,14 @@
 /* eslint no-unused-expressions: 0 */
 /* global expect, request, describe, it, before, after */
 import '../setup';
-import { mysql } from '../../src/index';
+import MySQL from '../../src/index';
+
+const mysql = new MySQL({
+  host: process.env.MODLI_MYSQL_HOST,
+  user: process.env.MODLI_MYSQL_USERNAME,
+  password: process.env.MODLI_MYSQL_PASSWORD,
+  database: process.env.MODLI_MYSQL_DATABASE
+});
 
 // Mock validation method, this is automatically done by the model
 mysql.validate = (body) => {
@@ -14,25 +21,26 @@ mysql.validate = (body) => {
 };
 
 // Specific model properties
-mysql.tableName = 'foo';
+mysql.tableName = 'foo1';
 
 describe('mysql', () => {
-  describe('config', () => {
+  describe('construct', () => {
     it('throws error on inproper config', () => {
       try {
-        mysql.config({ bad: 'config' });
+        const mysqlConstruct = new MySQL({ bad: 'config' });
+        return mysqlConstruct;
       } catch (e) {
         expect(e).to.be.an.instanceof(Error);
       }
     });
     it('connects when proper config provided', () => {
-      mysql.config({
+      const mysqlConstruct = new MySQL({
         host: process.env.MODLI_MYSQL_HOST,
         user: process.env.MODLI_MYSQL_USERNAME,
         password: process.env.MODLI_MYSQL_PASSWORD,
         database: process.env.MODLI_MYSQL_DATABASE
       });
-      expect(mysql.conn).to.be.an.object;
+      expect(mysqlConstruct.conn).to.be.an.object;
     });
   });
 
