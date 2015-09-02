@@ -57,7 +57,7 @@ mysql.createTable = (props) => {
   // Build query
   const len = Object.keys(props).length;
   let i = 1;
-  let query = `CREATE TABLE IF NOT EXISTS ${mysql.tableName} (`;
+  let query = `CREATE TABLE IF NOT EXISTS \`${mysql.tableName}\` (`;
   for (let prop in props) {
     let comma = (i !== len) ? ', ' : '';
     query += `${prop} ${props[prop].join(' ')}${comma}`;
@@ -89,7 +89,7 @@ mysql.create = (body, version = false) => {
         cols.push(prop);
         vals.push('"' + body[prop] + '"');
       }
-      const query = `INSERT INTO ${mysql.tableName} (${cols.join(',')}) VALUES (${vals.join(',')});`;
+      const query = `INSERT INTO \`${mysql.tableName}\` (${cols.join(',')}) VALUES (${vals.join(',')});`;
       // Run query
       resolve(mysql.query(query));
     }
@@ -109,7 +109,7 @@ mysql.read = (query) => {
   } else {
     where = '';
   }
-  return mysql.query(`SELECT * FROM ${mysql.tableName}${where}`);
+  return mysql.query(`SELECT * FROM \`${mysql.tableName}\`${where}`);
 };
 
 /**
@@ -136,7 +136,7 @@ mysql.update = (query, body, version = false) => {
           i++;
         }
       }
-      resolve(mysql.query(`UPDATE ${mysql.tableName} SET ${changes} WHERE ${query}`));
+      resolve(mysql.query(`UPDATE \`${mysql.tableName}\` SET ${changes} WHERE ${query}`));
     }
   });
 };
@@ -147,7 +147,7 @@ mysql.update = (query, body, version = false) => {
  * @param {Object} query
  * @returns {Object} promise
  */
-mysql.delete = (query) => mysql.query(`DELETE FROM ${mysql.tableName} WHERE ${query}`);
+mysql.delete = (query) => mysql.query(`DELETE FROM \`${mysql.tableName}\` WHERE ${query}`);
 
 /**
  * Extends the mysql object
