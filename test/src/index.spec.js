@@ -29,6 +29,17 @@ mysql.sanitize = (body) => {
 mysql.tableName = 'foo';
 
 describe('mysql', () => {
+  // Drop the table after testing
+  after((done) => {
+    mysql.query('DROP TABLE foo;')
+      .then(() => {
+        done();
+      })
+      .catch((err) => {
+        throw err;
+      });
+  });
+
   describe('construct', () => {
     it('throws error on inproper config', () => {
       try {
@@ -57,6 +68,13 @@ describe('mysql', () => {
           done();
         })
         .catch((err) =>  done(err));
+    });
+    it('fails on a bad query', (done) => {
+      mysql.query('SHOOT myself IN THE foot')
+        .catch((err) => {
+          expect(err).to.be.an.instanceof(Error);
+          done();
+        });
     });
   });
 
@@ -110,12 +128,19 @@ describe('mysql', () => {
         .catch((err) =>  done(err));
     });
     it('reads specific records when query supplied', (done) => {
-      mysql.read('`f name`="John"')
+      mysql.read('`f name`="John"', 1)
         .then((result) => {
           expect(result).to.be.an.array;
           done();
         })
         .catch((err) =>  done(err));
+    });
+    it('fails when a bad query is provided', (done) => {
+      mysql.read('`fart=`knocker')
+        .catch((err) => {
+          expect(err).to.be.an.instanceof(Error);
+          done();
+        });
     });
   });
 
@@ -133,7 +158,7 @@ describe('mysql', () => {
       mysql.update('`f name`="John"', {
         'f name': 'Bob',
         email: 'bsmith@gmail.com'
-      })
+      }, 1)
         .then((result) => {
           expect(result).to.be.an.object;
           expect(result.affectedRows).to.be.above(0);
