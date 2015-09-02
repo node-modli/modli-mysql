@@ -8,7 +8,7 @@ BUILD   = ./build
 PKG     = ./package.json
 
 # Tests
-TESTS     = ./test/src
+TESTS     = ./test/src/
 SPACE     :=
 SPACE     +=
 # Default to recursive, can override on run

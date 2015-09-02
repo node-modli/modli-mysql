@@ -51,7 +51,7 @@ describe('mysql', () => {
     it('creates a new table based on object passed (if not exists)', (done) => {
       mysql.createTable({
         'id': [ 'INT', 'NOT NULL', 'AUTO_INCREMENT', 'PRIMARY KEY'],
-        'fname': [ 'VARCHAR(255)' ],
+        'f name': [ 'VARCHAR(255)' ],
         'lname': [ 'VARCHAR(255)' ],
         'email': [ 'VARCHAR(255)' ]
       })
@@ -75,7 +75,7 @@ describe('mysql', () => {
     });
     it('creates a new record based on object passed', (done) => {
       mysql.create({
-        fname: 'John',
+        'f name': 'John',
         lname: 'Smith',
         email: 'jsmith@gmail.com'
       })
@@ -97,7 +97,7 @@ describe('mysql', () => {
         .catch((err) =>  done(err));
     });
     it('reads specific records when query supplied', (done) => {
-      mysql.read('fname="John"')
+      mysql.read('`f name`="John"')
         .then((result) => {
           expect(result).to.be.an.array;
           done();
@@ -117,8 +117,8 @@ describe('mysql', () => {
       });
     });
     it('updates record(s) based on query and body', (done) => {
-      mysql.update('fname="John"', {
-        fname: 'Bob',
+      mysql.update('`f name`="John"', {
+        'f name': 'Bob',
         email: 'bsmith@gmail.com'
       })
         .then((result) => {
@@ -132,7 +132,7 @@ describe('mysql', () => {
 
   describe('delete', () => {
     it('deletes record(s) based on query', (done) => {
-      mysql.delete('fname="Bob"')
+      mysql.delete('`f name`="Bob"')
         .then((result) => {
           expect(result).to.be.an.object;
           expect(result.affectedRows).to.be.above(0);
