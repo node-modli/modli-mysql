@@ -1,5 +1,5 @@
 const Promise = require('bluebird');
-const mysqlModule = require('mysql2');
+const mysqlModule = require('mysql');
 
 /**
  * @class mysql
