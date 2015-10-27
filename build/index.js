@@ -9,7 +9,7 @@ var _createClass = (function () { function defineProperties(target, props) { for
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
 var Promise = require('bluebird');
-var mysqlModule = require('mysql');
+var mysqlModule = require('mysql2');
 
 /**
  * @class mysql
@@ -22,7 +22,7 @@ var _default = (function () {
     this.conn = mysqlModule.createConnection(config);
     this.conn.connect(function (err) {
       if (err) {
-        throw new Error('MySQL Connection Error', err);
+        throw err;
       }
     });
   }

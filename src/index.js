@@ -1,5 +1,5 @@
 const Promise = require('bluebird');
-const mysqlModule = require('mysql');
+const mysqlModule = require('mysql2');
 
 /**
  * @class mysql
@@ -10,7 +10,7 @@ export default class {
     this.conn = mysqlModule.createConnection(config);
     this.conn.connect((err) => {
       if (err) {
-        throw new Error('MySQL Connection Error', err);
+        throw err;
       }
     });
   }
