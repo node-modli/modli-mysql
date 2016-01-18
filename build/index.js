@@ -74,6 +74,31 @@ var _default = (function () {
     }
 
     /**
+     * Properly formats data for inserts and updates
+     * @memberof mysql
+     * @param {*} val The value to manipulate
+     * @returns {String} properly formatted insert/update value
+     */
+  }, {
+    key: 'typeHandler',
+    value: function typeHandler(val) {
+      if (val === null && typeof val === 'object') {
+        return 'null';
+      }
+      if (val === true && typeof val === 'boolean') {
+        return 'true';
+      }
+      if (val === false && typeof val === 'boolean') {
+        return 'false';
+      }
+      if (typeof val === 'number') {
+        return val;
+      }
+      // All others, string
+      return '"' + val + '"';
+    }
+
+    /**
      * Creates a new record
      * @memberof mysql
      * @param {Object} body The record to insert
@@ -98,7 +123,7 @@ var _default = (function () {
           var vals = [];
           for (var prop in body) {
             cols.push(prop);
-            vals.push('"' + body[prop] + '"');
+            vals.push(_this2.typeHandler(body[prop]));
           }
           var query = 'INSERT INTO `' + _this2.tableName + '` (`' + cols.join('`,`') + '`) VALUES (' + vals.join(',') + ');';
           // Run query
@@ -165,7 +190,8 @@ var _default = (function () {
           for (var prop in body) {
             if (({}).hasOwnProperty.call(body, prop)) {
               var comma = i !== len ? ', ' : '';
-              changes += '`' + prop + '`="' + body[prop] + '"' + comma;
+              var val = _this4.typeHandler(body[prop]);
+              changes += '`' + prop + '`=' + val + comma;
               i++;
             }
           }

@@ -1,0 +1,21 @@
+from: technologyadvice/node-build:4
+services:
+  - modli/mysql:
+      name: modli_mysql
+      persist: false
+before-task: |
+  export MODLI_MYSQL_HOST=$MODLI_MYSQL_PORT_3306_TCP_ADDR
+  export MODLI_MYSQL_PASSWORD=modli
+  export MODLI_MYSQL_USERNAME=modli
+  export MODLI_MYSQL_DATABASE=modli
+tasks:
+  env: env
+  clean: npm run clean
+  install: npm install
+  mocha: |
+    sleep 10
+    npm run mocha
+  test: npm run test
+  cover: npm run cover
+  lint: npm run lint
+  build: npm run build
