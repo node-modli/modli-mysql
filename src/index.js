@@ -53,7 +53,7 @@ export default class {
     // Run query
     return this.query(query);
   }
-  
+
   /**
    * Properly formats data for inserts and updates
    * @memberof mysql
