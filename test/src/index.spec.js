@@ -10,6 +10,16 @@ const mysql = new MySQL({
   database: process.env.MODLI_MYSQL_DATABASE
 });
 
+const testRecord = {
+  'f name': 'John',
+  lname: 'Smith',
+  email: 'jsmith@gmail.com',
+  notes: null,
+  active: true,
+  testFalse: false,
+  code: 555
+};
+
 // Mock validation method, this is automatically done by the model
 mysql.validate = (body) => {
   // Test validation failure by passing `failValidate: true`
@@ -84,7 +94,11 @@ describe('mysql', () => {
         'id': [ 'INT', 'NOT NULL', 'AUTO_INCREMENT', 'PRIMARY KEY'],
         'f name': [ 'VARCHAR(255)' ],
         'lname': [ 'VARCHAR(255)' ],
-        'email': [ 'VARCHAR(255)' ]
+        'email': [ 'VARCHAR(255)' ],
+        'notes': [ 'VARCHAR(255)', 'DEFAULT NULL' ],
+        'active': [ 'BOOLEAN' ],
+        'testFalse': [ 'BOOLEAN' ],
+        'code': [ 'INT' ]
       })
       .then((result) => {
         expect(result).to.be.an.object;
@@ -105,11 +119,7 @@ describe('mysql', () => {
       });
     });
     it('creates a new record based on object passed', (done) => {
-      mysql.create({
-        'f name': 'John',
-        lname: 'Smith',
-        email: 'jsmith@gmail.com'
-      })
+      mysql.create(testRecord)
       .then((result) => {
         expect(result.insertId).to.be.a.number;
         done();
@@ -131,6 +141,13 @@ describe('mysql', () => {
       mysql.read('`f name`="John"', 1)
         .then((result) => {
           expect(result).to.be.an.array;
+          // Add auto-created ID
+          testRecord.id = 1;
+          // Set Booleans for comparison
+          result[0].active = Boolean(result[0].active);
+          result[0].testFalse = Boolean(result[0].testFalse);
+          // Test body
+          expect(result[0]).to.deep.equal(testRecord);
           done();
         })
         .catch((err) =>  done(err));

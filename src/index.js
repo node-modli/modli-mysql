@@ -53,6 +53,21 @@ export default class {
     // Run query
     return this.query(query);
   }
+  
+  /**
+   * Properly formats data for inserts and updates
+   * @memberof mysql
+   * @param {*} val The value to manipulate
+   * @returns {String} properly formatted insert/update value
+   */
+  typeHandler (val) {
+    if (val === null && typeof(val) === 'object') { return 'null'; }
+    if (val === true && typeof(val) === 'boolean') { return 'true'; }
+    if (val === false && typeof(val) === 'boolean') { return 'false'; }
+    if (typeof(val) === 'number') { return val; }
+    // All others, string
+    return `"${val}"`;
+  }
 
   /**
    * Creates a new record
@@ -73,7 +88,7 @@ export default class {
         let vals = [];
         for (let prop in body) {
           cols.push(prop);
-          vals.push('"' + body[prop] + '"');
+          vals.push(this.typeHandler(body[prop]));
         }
         const query = `INSERT INTO \`${this.tableName}\` (\`${cols.join('`,`')}\`) VALUES (${vals.join(',')});`;
         // Run query
@@ -130,7 +145,8 @@ export default class {
         for (let prop in body) {
           if ({}.hasOwnProperty.call(body, prop)) {
             let comma = (i !== len) ? ', ' : '';
-            changes += `\`${prop}\`="${body[prop]}"${comma}`;
+            let val = this.typeHandler(body[prop]);
+            changes += `\`${prop}\`=${val}${comma}`;
             i++;
           }
         }

@@ -12,7 +12,9 @@ tasks:
   env: env
   clean: npm run clean
   install: npm install
-  mocha: npm run mocha
+  mocha: |
+    sleep 10
+    npm run mocha
   test: npm run test
   cover: npm run cover
   lint: npm run lint
