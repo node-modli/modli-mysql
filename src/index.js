@@ -77,24 +77,19 @@ export default class {
    * @returns {Object} promise
    */
   create (body, version = false) {
-    return new Promise((resolve, reject) => {
-      // Validate
-      const validationErrors = this.validate(body, version);
-      if (validationErrors) {
-        reject(validationErrors);
-      } else {
+    return this.validate(body, version)
+      .then(data => {
         // Build query
         let cols = [];
         let vals = [];
-        for (let prop in body) {
+        for (let prop in data) {
           cols.push(prop);
-          vals.push(this.typeHandler(body[prop]));
+          vals.push(this.typeHandler(data[prop]));
         }
         const query = `INSERT INTO \`${this.tableName}\` (\`${cols.join('`,`')}\`) VALUES (${vals.join(',')});`;
         // Run query
-        resolve(this.query(query));
-      }
-    });
+        return this.query(query);
+      });
   }
 
   /**
@@ -134,25 +129,21 @@ export default class {
    * @returns {Object} promise
    */
   update (query, body, version = false) {
-    return new Promise((resolve, reject) => {
-      const validationErrors = this.validate(body, version);
-      if (validationErrors) {
-        reject(validationErrors);
-      } else {
+    return this.validate(body, version)
+      .then(data => {
         let i = 1;
         let changes = '';
-        let len = Object.keys(body).length;
-        for (let prop in body) {
-          if ({}.hasOwnProperty.call(body, prop)) {
+        let len = Object.keys(data).length;
+        for (let prop in data) {
+          if ({}.hasOwnProperty.call(data, prop)) {
             let comma = (i !== len) ? ', ' : '';
-            let val = this.typeHandler(body[prop]);
+            let val = this.typeHandler(data[prop]);
             changes += `\`${prop}\`=${val}${comma}`;
             i++;
           }
         }
-        resolve(this.query(`UPDATE \`${this.tableName}\` SET ${changes} WHERE ${query}`));
-      }
-    });
+        return this.query(`UPDATE \`${this.tableName}\` SET ${changes} WHERE ${query}`);
+      });
   }
 
   /**
