@@ -22,12 +22,12 @@ const testRecord = {
 
 // Mock validation method, this is automatically done by the model
 mysql.validate = (body) => {
-  // Test validation failure by passing `failValidate: true`
-  if (body.failValidate) {
-    return { error: true };
-  }
-  // Mock passing validation, return null
-  return null;
+  return new Promise((resolve, reject) => {
+    if (body.failValidate) {
+      reject({ error: true });
+    }
+    resolve(body);
+  });
 };
 
 // Mock sanitize method, this is automatically done by the model
