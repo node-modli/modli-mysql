@@ -121,7 +121,7 @@ describe('mysql', () => {
     it('creates a new record based on object passed', (done) => {
       mysql.create(testRecord)
       .then((result) => {
-        expect(result.insertId).to.be.a.number;
+        expect(result).to.deep.equal(result);
         done();
       })
       .catch((err) =>  done(err));
@@ -177,8 +177,8 @@ describe('mysql', () => {
         email: 'bsmith@gmail.com'
       }, 1)
         .then((result) => {
-          expect(result).to.be.an.object;
-          expect(result.affectedRows).to.be.above(0);
+          expect(result.email).to.equal('bsmith@gmail.com');
+          expect(result['f name']).to.equal('Bob');
           done();
         })
         .catch((err) => done(err));
