@@ -88,7 +88,13 @@ export default class {
         }
         const query = `INSERT INTO \`${this.tableName}\` (\`${cols.join('`,`')}\`) VALUES (${vals.join(',')});`;
         // Run query
-        return this.query(query);
+        return this.query(query)
+          .then(res => {
+            if (res.affectedRows === 1) {
+              return data
+            }
+            throw new Error('Unable to create record')
+          });
       });
   }
 
@@ -142,7 +148,13 @@ export default class {
             i++;
           }
         }
-        return this.query(`UPDATE \`${this.tableName}\` SET ${changes} WHERE ${query}`);
+        return this.query(`UPDATE \`${this.tableName}\` SET ${changes} WHERE ${query}`)
+          .then(res => {
+            if (res.affectedRows > 0) {
+              return data
+            }
+            throw new Error('Could not update record(s)')
+          });
       });
   }
 
