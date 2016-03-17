@@ -177,8 +177,8 @@ describe('mysql', () => {
         email: 'bsmith@gmail.com'
       }, 1)
         .then((result) => {
-          expect(result.email).to.equal('bsmith@gmail.com')
-          expect(result['f name']).to.equal('Bob')
+          expect(result.email).to.equal('bsmith@gmail.com');
+          expect(result['f name']).to.equal('Bob');
           done();
         })
         .catch((err) => done(err));

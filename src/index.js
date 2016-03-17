@@ -91,9 +91,9 @@ export default class {
         return this.query(query)
           .then(res => {
             if (res.affectedRows === 1) {
-              return data
+              return data;
             }
-            throw new Error('Unable to create record')
+            throw new Error('Unable to create record');
           });
       });
   }
@@ -151,9 +151,9 @@ export default class {
         return this.query(`UPDATE \`${this.tableName}\` SET ${changes} WHERE ${query}`)
           .then(res => {
             if (res.affectedRows > 0) {
-              return data
+              return data;
             }
-            throw new Error('Could not update record(s)')
+            throw new Error('Could not update record(s)');
           });
       });
   }
