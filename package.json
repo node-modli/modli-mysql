@@ -1,6 +1,6 @@
 {
   "name": "modli-mysql",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "Modli adapter for MySQL",
   "main": "build/index.js",
   "repository": {
