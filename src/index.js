@@ -127,6 +127,18 @@ export default class {
   }
 
   /**
+   * Patch (partial update) an existing record
+   * @memberof mysql
+   * @param {Object} query The query to identify update record(s)
+   * @params {Object} body The record contents to update
+   * @params {String|Number} version The version of the model
+   * @returns {Object} promise
+   */
+  patch (query, body, version = false) {
+    return this.update(query, body, version, true);
+  }
+
+  /**
    * Updates an existing record
    * @memberof mysql
    * @param {Object} query The query to identify update record(s)
@@ -134,8 +146,8 @@ export default class {
    * @params {String|Number} version The version of the model
    * @returns {Object} promise
    */
-  update (query, body, version = false) {
-    return this.validate(body, version)
+  update (query, body, version = false, partial = false) {
+    return this.validate(body, version, partial)
       .then(data => {
         let i = 1;
         let changes = '';
