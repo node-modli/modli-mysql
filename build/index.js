@@ -112,23 +112,22 @@ var _default = (function () {
 
       var version = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
 
-      return new Promise(function (resolve, reject) {
-        // Validate
-        var validationErrors = _this2.validate(body, version);
-        if (validationErrors) {
-          reject(validationErrors);
-        } else {
-          // Build query
-          var cols = [];
-          var vals = [];
-          for (var prop in body) {
-            cols.push(prop);
-            vals.push(_this2.typeHandler(body[prop]));
-          }
-          var query = 'INSERT INTO `' + _this2.tableName + '` (`' + cols.join('`,`') + '`) VALUES (' + vals.join(',') + ');';
-          // Run query
-          resolve(_this2.query(query));
+      return this.validate(body, version).then(function (data) {
+        // Build query
+        var cols = [];
+        var vals = [];
+        for (var prop in data) {
+          cols.push(prop);
+          vals.push(_this2.typeHandler(data[prop]));
         }
+        var query = 'INSERT INTO `' + _this2.tableName + '` (`' + cols.join('`,`') + '`) VALUES (' + vals.join(',') + ');';
+        // Run query
+        return _this2.query(query).then(function (res) {
+          if (res.affectedRows === 1) {
+            return data;
+          }
+          throw new Error('Unable to create record');
+        });
       });
     }
 
@@ -163,6 +162,13 @@ var _default = (function () {
         });
       });
     }
+  }, {
+    key: 'patch',
+    value: function patch(query, body) {
+      var version = arguments.length <= 2 || arguments[2] === undefined ? false : arguments[2];
+
+      return this.update(query, body, version, true);
+    }
 
     /**
      * Updates an existing record
@@ -178,25 +184,26 @@ var _default = (function () {
       var _this4 = this;
 
       var version = arguments.length <= 2 || arguments[2] === undefined ? false : arguments[2];
+      var partial = arguments.length <= 3 || arguments[3] === undefined ? false : arguments[3];
 
-      return new Promise(function (resolve, reject) {
-        var validationErrors = _this4.validate(body, version);
-        if (validationErrors) {
-          reject(validationErrors);
-        } else {
-          var i = 1;
-          var changes = '';
-          var len = Object.keys(body).length;
-          for (var prop in body) {
-            if (({}).hasOwnProperty.call(body, prop)) {
-              var comma = i !== len ? ', ' : '';
-              var val = _this4.typeHandler(body[prop]);
-              changes += '`' + prop + '`=' + val + comma;
-              i++;
-            }
+      return this.validate(body, version, partial).then(function (data) {
+        var i = 1;
+        var changes = '';
+        var len = Object.keys(data).length;
+        for (var prop in data) {
+          if (({}).hasOwnProperty.call(data, prop)) {
+            var comma = i !== len ? ', ' : '';
+            var val = _this4.typeHandler(data[prop]);
+            changes += '`' + prop + '`=' + val + comma;
+            i++;
           }
-          resolve(_this4.query('UPDATE `' + _this4.tableName + '` SET ' + changes + ' WHERE ' + query));
         }
+        return _this4.query('UPDATE `' + _this4.tableName + '` SET ' + changes + ' WHERE ' + query).then(function (res) {
+          if (res.affectedRows > 0) {
+            return data;
+          }
+          throw new Error('Could not update record(s)');
+        });
       });
     }
 
