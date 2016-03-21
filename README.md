@@ -123,6 +123,18 @@ mysqlTest.update('fname="John"', {
   .catch(/*...*/);
 ```
 
+### `patch`
+
+Patches (partial update) based on query and body:
+
+```javascript
+mysqlTest.patch('fname="John"', {
+    fname: 'Bob',
+  })
+  .then(/*...*/)
+  .catch(/*...*/);
+```
+
 ### `delete`
 
 Deletes record(s) based on query:
